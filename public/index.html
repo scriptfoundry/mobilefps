@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>FPS Data</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+        <style>
+            * {
+                font-family: sans-serif;
+                padding: 0;
+                border: 0;
+                margin: 0;
+            }
+            body {
+                padding: .5em;
+            }
+            h1 {
+                padding-bottom: 1em;
+            }
+            h2 {
+            }
+            h3 {
+                margin: 0;
+                border-bottom: 1px solid #ccc; 
+            }
+            li { margin: 1em 2em; }
+            input[type=text] {
+                display: block;
+                width: 100%;
+                border: 1px solid #ccc;
+                box-sizing:border-box;
+                padding: 1em;
+                margin-bottom: 1em;
+                font-size: 1em;
+            }
+            table {
+                width: 100%;
+                margin-bottom: 1em;
+            }
+
+            tr td:nth-child(even) { text-align: right; }
+            body > div { display: none; margin-bottom: 2em; }
+            body > div.visible { display: block; }
+            .start-test .test {display: none;}
+            .start-test .test.visible {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                padding-top: 4em;
+            }
+
+            button {
+                width: 100%;
+                margin: .25em 0;
+                border: 1px solid #ccc;
+                padding: 1em;
+                background-color: #fff;
+                border-radius: .3em;
+                font-size: 1em;
+                font-weight: bold;                
+            }
+            button.device-selector {
+                text-align: left;
+            }
+            .start-test .test {
+                position: absolute;
+                top:4em;
+                height: 100%;
+                padding: .5em;
+                overflow-y: hidden;                
+            }
+            .disclose-data h2 {
+                margin-top: 4em;
+            }
+            .disclose-data span {
+                word-break: break-word;
+            }
+            canvas {
+                position: relative;
+                left: 50%;
+                margin-left: -100px;
+                margin-top: 2em;
+            }
+            .visible .cube-container {
+                left: 50%;
+                width: 200px;
+                height: 200px;
+                position: relative;
+                perspective: 1000px;
+                margin-top: 2em;
+                margin-left: -100px;
+            }
+            .visible .cube {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                transform-style: preserve-3d;
+                transition: transform 1s;
+                
+                animation-duration: 3s;
+                -webkit-animation-duration: 3s;
+                animation-name: rotation;
+                -webkit-animation-name: rotation;
+                animation-iteration-count: infinite;
+                -webkit-animation-iteration-count: infinite;
+            }
+            .visible .cube .face {
+                margin: 0;
+                width: 196px;
+                height: 196px;
+                display: block;
+                position: absolute;
+                border: 2px solid black;
+                font-size: 5em;
+            }
+
+            .visible .cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); background-color: #ffbebe; }
+            .visible .cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); background-color: #fff4be; }
+            .visible .cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); background-color: #daffbe; }
+            .visible .cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); background-color: #befcff; }
+            .visible .cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background-color: #ddbeff; }
+            .visible .cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background-color: #ceded1; }
+
+            @keyframes rotation {
+                0% { transform: translateZ( -100px ) rotateY(    0deg ); }
+                33% { transform: translateZ( -100px ) rotateX(   90deg ) }
+                66% { transform: translateZ( -100px ) rotateY(  -90deg ); }
+            }
+            @-webkit-keyframes rotation {
+                0% { transform: translateZ( -100px ) rotateY(    0deg ); }
+                33% { transform: translateZ( -100px ) rotateX(   90deg ) }
+                66% { transform: translateZ( -100px ) rotateY(  -90deg ); }
+            }
+
+            .visible .cube.show-front  { transform: translateZ( -100px ) rotateY(    0deg ); }
+            .visible .cube.show-back   { transform: translateZ( -100px ) rotateX( -180deg ); }
+            .visible .cube.show-right  { transform: translateZ( -100px ) rotateY(  -90deg ); }
+            .visible .cube.show-left   { transform: translateZ( -100px ) rotateY(   90deg ); }
+            .visible .cube.show-top    { transform: translateZ( -100px ) rotateX(  -90deg ); }
+            .visible .cube.show-bottom { transform: translateZ( -100px ) rotateX(   90deg ); }
+        </style>
+
+    </head>
+    <body>
+        <div class="part-1 visible">
+            <h1>Mobile FPS Test</h1>
+            <p>Some mobile devices are able to render native HTML animations at a crisp 60 frames per second, while others simply cannot.</p>
+            <button class="advance">Begin</button>
+        </div>
+        <div class="part-2">
+            <h2>How would you describe your hardware?</h2>
+            <button class="device-selector">PC</button>
+            <button class="device-selector">Current flagship mobile</button>
+            <button class="device-selector">Current non-flagship mobile</button>
+            <button class="device-selector">Current discount mobile</button>
+            <button class="device-selector">Older flagship mobile flagship</button>
+            <button class="device-selector">Older non-flagship mobile</button>
+            <button class="device-selector">Older discount mobile</button> 
+        </div>
+        <div class="part-3">
+            <h1>More about your hardware:</h1>
+            <h2>Who makes your phone:</h2>
+            <input type="text" name="maker" placeholder="(Optional)">
+            <h2>What model is it?</h2>
+            <input type="text" name="model" placeholder="(Optional)">
+            <button class="device-details">Begin test</button>
+
+
+        </div>
+        <div class="part-4 start-test">
+            <h1>Testing FPS...</h1>
+            <div class="test">
+                <h2>1. Collecting baseline FPS... please wait</h2>
+                
+            </div>
+            <div class="test">
+                <h2>2. Measuring FPS with DOM mutations: <span id="dom-mutation-target">-</span></h2>    
+            </div>
+            <div class="test">
+                <h2>3. Measuring FPS with canvas animation</h2>    
+
+               <canvas id="canvas" width="200" height="198"></canvas>
+            </div>
+            <div class="test">
+                <h2>4. Measuring FPS with CSS Matrix Transforms</h2>    
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="face front">1</div>
+                        <div class="face back">2</div>
+                        <div class="face right">3</div>
+                        <div class="face left">4</div>
+                        <div class="face top">5</div>
+                        <div class="face bottom">6</div>
+                    </div>
+                </div>                
+            </div>
+            <div class="test">
+                <h2>5. Measuring FPS with Touch events</h2>
+                <p>Please drag your finger around your screen until the test ends.</p>
+                <p>Test starts when you press the screen.</p>
+                <div class="full-screen-overlay"></div>
+            </div>
+            
+            
+        </div>
+        <div class="part-5 summary">
+            <h1>Summary</h1>
+
+            <div class="test">
+                <h3>Name</h3>
+                <table>
+                    <tr>
+                        <td>Avg</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>StdDev</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Samples</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="test">
+                <h3>Name</h3>
+                <table>
+                    <tr>
+                        <td>Avg</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>StdDev</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Samples</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="test">
+                <h3>Name</h3>
+                <table>
+                    <tr>
+                        <td>Avg</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>StdDev</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Samples</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="test">
+                <h3>Name</h3>
+                <table>
+                    <tr>
+                        <td>Avg</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>StdDev</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Samples</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="test">
+                <h3>Name</h3>
+                <table>
+                    <tr>
+                        <td>Avg</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>StdDev</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Samples</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="test-again">Rerun tests</button>
+            <button class="advance">Share your results</button>
+
+        </div>
+
+        <div class="part-6 disclose-data">
+            <h1>Finished</h1>
+            <p>Please help the community. Consider sharing your results!</p>
+            <ul>
+                <li>Only the data you see below will be sent to the server.</li>
+                <li>If you don't feel comfortable sharing this data, just close this page and nothing will happen.</li>
+                <li>No personally identifiable information will be collected or stored.</li>
+                <li>Nothing other than what you see below will be collected or stored.</li>
+                <li>All collected data will be made public at the completion of the study.</li>
+            </ul> 
+            <button class="send-results">Send now</button>
+            <h2>The following data will be sent</h2>
+            <p><b>Device description:</b> <span></span></p>
+            <p><b>Maker:</b> <span></span></p>
+            <p><b>Model:</b> <span></span></p>
+            <p><b>Your useragent string:</b> <span></span></p>
+            <p><b>Samples collected</b></p>
+            <p><span></span></p>
+            <button class="send-results">Send now</button>
+        </div>
+
+        <div class="part-7">
+            <h1>Thank you!</h1>
+        </div>
+
+        <script>
+            var part = 0,
+                maxPart = 6,
+                test = -1,
+                maxTest = 2,
+                getElements = function (selector, parent) { return [].slice.call((parent || document).querySelectorAll(selector)); },
+                sections = getElements('body > div'),
+                advanceButtons = getElements('button.advance'),
+                deviceSelectorButtons = getElements('button.device-selector'),
+                deviceDetailsButtons = getElements('button.device-details'),
+                restartButtons = getElements('button.test-again')
+                sendResultsButtons = getElements('.send-results')
+                testMonitors = getElements('.start-test .test'),
+                userPlatform = null,
+                maker = null,
+                model = null,
+                samples = {
+                    baseline: [],
+                    dom: [],
+                    canvas: [],
+                    css: [],
+                    touch: []
+                },
+                summaryData = null;
+
+            var sum = function (values) { return values.reduce(function (carry, val) { return carry + val; }, 0); };
+            var min = function (values) { return values.reduce(function (carry, val) { return val < carry ? val : carry; }, Number.MAX_VALUE); };
+            var max = function (values) { return values.reduce(function (carry, val) { return val > carry ? val : carry; }, Number.MIN_VALUE); };
+            var average = function (values) { return sum(values) / values.length; };
+            var squareDiffs = function (values, avg) { return values.map(function (val) { var diff = val - avg; return diff * diff; }); };
+            var standardDeviation = function (values) {
+                var avg = average(values),
+                    sqd = squareDiffs(values, avg),
+                    avgSquareDiff = average(sqd);
+
+                return Math.sqrt(avgSquareDiff);
+            };
+
+            var recordSamples = function (sampleStore, callback) {
+                var previousTime = null,
+                    completeTime = null;
+
+                var getSample = function (time) {
+                    if (previousTime === null) {
+                        completeTime = time + 2000;
+                    } else {
+                        sampleStore.push(1000 / (time - previousTime));
+                        if (time > completeTime || samples.length > 120) {
+                            return callback(sampleStore);
+                        };
+                    }
+
+                    previousTime = time;
+                    requestAnimationFrame(getSample);
+                };
+                setTimeout(function () { requestAnimationFrame(getSample); }, 1000);
+            };
+
+            var showSummary = function () {
+                var summaryParts = getElements('.summary .test'),
+                    truncateData = function (samples) {
+                        return samples.map(function (sample) { return Math.round(sample * 1000); });
+                    };
+
+
+                summaryData = [
+                    {title: 'Baseline', samples: samples.baseline},
+                    {title: 'DOM mutations', samples: samples.dom},
+                    {title: 'Canvas animations', samples: samples.canvas},
+                    {title: 'CSS matrix transforms', samples: samples.css},
+                    {title: 'Touch events', samples: samples.touch}
+                ];
+
+                summaryData.forEach(function (data, index) {
+                    var summaryPart = summaryParts[index],
+                        cells = getElements('td:nth-child(even)', summaryPart),
+                        samples = data.samples,
+                        cellData = [average(samples).toPrecision(3) + ' fps', max(samples).toPrecision(3) + ' fps', min(samples).toPrecision(3) + ' fps', standardDeviation(samples).toFixed(5), samples.length]
+
+                    data.summary = cellData;
+                    data.samples = truncateData(samples);
+                    summaryPart.querySelector('h3').innerHTML = data.title;
+                    cells.forEach(function (cell, index) { cell.innerHTML = cellData[index]});                    
+                });
+
+                advancePart();
+            };
+
+            var showDisclosures = function () {
+                var disclosureParts = getElements('.disclose-data span'),
+                    disclosureData = [userPlatform, maker, model, window.navigator.userAgent || 'unknown user agent', JSON.stringify(summaryData)];
+
+                disclosureParts.forEach(function (cell, index) { cell.innerHTML = disclosureData[index]; });
+            };
+
+            var selectDevice = function (button) {
+                userPlatform = button.innerHTML;
+            };
+
+            var selectMakerAndModel = function () {
+                maker = document.querySelector('[name=maker]').value || 'undisclosed';
+                model = document.querySelector('[name=model]').value || 'undisclosed';
+            };
+
+
+            var getCssTransformSamples = function () {
+                var onComplete = function () {
+                    getTouchSamples();
+                };
+                advanceTest()
+                setTimeout(function () {
+                    recordSamples(samples.css, onComplete);
+                }, 1000);
+            };            
+            var getCanvasSamples = function (callback) {
+                // Most of the code for the canvas animation is from Mozilla's Canvas API Tutorial 
+                // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations
+
+                var img = new Image(),
+                    CanvasXSize = 800,
+                    CanvasYSize = 200,
+                    scale = 1.05,
+                    y = -4.5,
+                    dx = 0.75,
+                    startTime = null,
+                    interval = null,
+                    animating = false,
+                    imgW,
+                    imgH,
+                    x = 0,
+                    clearX,
+                    clearY,
+                    ctx;
+
+                var draw = function () {
+                    var now = new Date().getTime();
+                    if (startTime === null) startTime = now;
+
+                    ctx.clearRect(0,0,clearX,clearY);
+                    if (imgW <= CanvasXSize) {
+                        if (x > (CanvasXSize)) { x = 0; }
+                        if (x > (CanvasXSize-imgW)) { ctx.drawImage(img,x-CanvasXSize+1,y,imgW,imgH); }
+                    }
+                    else {
+                        if (x > (CanvasXSize)) { x = CanvasXSize-imgW; }
+                        if (x > (CanvasXSize-imgW)) { ctx.drawImage(img,x-imgW+1,y,imgW,imgH); }
+                    }
+                    ctx.drawImage(img,x,y,imgW,imgH);
+                    x += dx;
+
+                    if (animating) requestAnimationFrame(draw);
+                };
+
+                var onComplete = function () {
+                    clearInterval(interval);
+                    animating = false;
+                    getCssTransformSamples();
+                };
+
+                var startTest = function () {
+                    animating = true;
+                    draw();
+
+                    setTimeout(function () {
+                        recordSamples(samples.canvas, onComplete);
+                    }, 1000);
+                }; 
+
+                img.onload = function() {
+                    imgW = img.width*scale;
+                    imgH = img.height*scale;
+                    if (imgW > CanvasXSize) { x = CanvasXSize-imgW; } // image larger than canvas
+                    if (imgW > CanvasXSize) { clearX = imgW; } // image larger than canvas
+                    else { clearX = CanvasXSize; }
+                    if (imgH > CanvasYSize) { clearY = imgH; } // image larger than canvas
+                    else { clearY = CanvasYSize; }
+                    ctx = document.getElementById('canvas').getContext('2d');
+                    draw();
+                    startTest();
+                };
+
+                advanceTest();
+                img.src = 'https://mdn.mozillademos.org/files/4553/Capitan_Meadows,_Yosemite_National_Park.jpg';
+            };
+            var getTouchSamples = function () {
+                var testStarted = false;
+                var startTest = function () {
+                    if (testStarted) return;
+
+                    testStarted = true;
+                    document.body.removeEventListener('touchstart', startTest);
+                    recordSamples(samples.touch, showSummary);
+                };
+                advanceTest();
+
+                document.body.addEventListener('touchstart', startTest);
+            };
+            var getDOMMutations = function () {
+                var domTarget = document.querySelector('#dom-mutation-target'),
+                    chars = 'abcdefghijklmnopqrstuvwxyz'.split(''),
+                    charCount = chars.length,
+                    intervalId = setInterval(function () { domTarget.innerHTML = chars[Math.floor(Math.random() * charCount)]; }, 100)
+
+                var onComplete = function () {
+                    clearInterval(intervalId);
+                    getCanvasSamples();
+                };
+
+                advanceTest();
+                recordSamples(samples.dom, onComplete);
+            };
+            var getBaseline = function () {
+                advanceTest();
+                recordSamples(samples.baseline, getDOMMutations);
+            };
+
+            var startTest = function () {
+                samples.baseline = [];
+                samples.dom = [];
+                samples.canvas = [];
+                samples.touch = [];
+
+                getBaseline();
+            };
+            var restartTest = function () {
+                var newPart = sections.reduce(function (carry, section, index) { if (section.className.indexOf('start-test') > -1) return index; return carry; });
+                debugger
+                test = -1;
+                advancePart(newPart);
+            };
+
+            var advancePart = function (newPart) {
+                if (typeof newPart === 'number') {
+                    if (newPart >= maxPart) return;
+                    part = newPart;
+                } else {
+                    if (part >= maxPart) return;
+                    part += 1;
+                }
+
+                sections.forEach(function (section, index) {
+                    var classNames = section.className.split(/\s+/);
+                    if (index === part) {
+                        classNames.push('visible');
+                        if (classNames.some(function (className) { return className === 'start-test'})) startTest();
+                        if (classNames.some(function (className) { return className === 'disclose-data'})) showDisclosures();
+                    } else {
+                        classNames = classNames.filter(function (className) { return className !== 'visible'});
+                    }
+                    section.className = classNames.join(' ');
+                });
+
+                scrollTo(0, 0);
+            };
+            var advanceTest = function () {
+                if (test >= testMonitors.length) return;
+                test += 1;
+                testMonitors.forEach(function (testMonitor, index) {
+                    var classNames = testMonitor.className.split(/\s+/).filter(function (className) { return className !== 'visible'; });
+                    if (index === test) classNames.push('visible');
+                    testMonitor.className = classNames.join(' ');
+
+                });
+            };
+            var sendResults = function () {
+                var payload = {
+                    userPlatform: userPlatform,
+                    userAgent: navigator.userAgent,
+                    samples: samples
+                };
+
+                console.log(summaryData);
+                console.log(navigator);
+                console.log(samples);
+            };
+
+            advanceButtons.forEach(function (button) { button.addEventListener('click', advancePart); });
+            deviceSelectorButtons.forEach(function (button) { button.addEventListener('click', function () { selectDevice(button); advancePart(); }); });
+            deviceDetailsButtons.forEach(function (button) { button.addEventListener('click', function () { selectMakerAndModel(); advancePart(); }); });
+            restartButtons.forEach(function (button) { button.addEventListener('click', restartTest); });
+            sendResultsButtons.forEach(function (button) { button.addEventListener('click', sendResults); });
+
+        </script>
+    </body>
+</html>
