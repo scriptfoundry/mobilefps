@@ -1,9 +1,11 @@
 var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var bodyParser = require('body-parser');
+  path = require('path'),
+  favicon = require('serve-favicon'),
+  bodyParser = require('body-parser'),
 
-var app = express();
+  app = express(),
+  port = process.env.OPENSHIFT_NODEJS_PORT || 8000,
+  address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +35,6 @@ app.use(function(err, req, res) {
   });
 });
 
-app.listen(3000, function () {
+app.listen(port, address, function () {
   console.log('Server loaded');
-})
+});
