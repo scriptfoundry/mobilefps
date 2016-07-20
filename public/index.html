@@ -35,9 +35,9 @@
             p {
                 padding: .5em 0;
             }
-            ul {
-                margin-bottom: 3em;
-            }
+            b { font-weight: bold; }
+            ul { margin-bottom: 3em; }
+            ol { margin: .5em 0; }
             li { margin: 0 2em 0.5em; }
             input[type=text] {
                 display: block;
@@ -56,6 +56,10 @@
             tr td:nth-child(even) { text-align: right; }
             body > div { display: none; margin-bottom: 2em; }
             body > div.visible { display: block; }
+
+            .support { display: none; }
+            .support.visible { display: block; }
+
             .start-test .test {display: none;}
             .start-test .test.visible {
                 display: block;
@@ -121,16 +125,19 @@
                 width: 200px;
                 height: 200px;
                 position: relative;
-                perspective: 1000px;
                 margin-top: 2em;
                 margin-left: -100px;
+                perspective: 1000px;
+                -webkit-perspective: 1000px;
             }
             .visible .cube {
                 width: 100%;
                 height: 100%;
                 position: absolute;
                 transform-style: preserve-3d;
+                -webkit-transform-style: preserve-3d;
                 transition: transform 1s;
+                -webkit-transition: transform 1s;
                 
                 animation-duration: 3s;
                 -webkit-animation-duration: 3s;
@@ -149,12 +156,12 @@
                 font-size: 5em;
             }
 
-            .visible .cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); background-color: rgba(255, 190, 190, 0.9); }
-            .visible .cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); background-color: rgba(255, 244, 190, 0.9); }
-            .visible .cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); background-color: rgba(218, 255, 190, 0.9); }
-            .visible .cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); background-color: rgba(190, 252, 255, 0.9); }
-            .visible .cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background-color: rgba(221, 190, 255, 0.9); }
-            .visible .cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background-color: rgba(206, 222, 209, 0.9); }
+            .visible .cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); -webkit-transform: rotateY(   0deg ) translateZ( 100px ); background-color: rgba(255, 190, 190, 0.9); }
+            .visible .cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); -webkit-transform: rotateX( 180deg ) translateZ( 100px ); background-color: rgba(255, 244, 190, 0.9); }
+            .visible .cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); -webkit-transform: rotateY(  90deg ) translateZ( 100px ); background-color: rgba(218, 255, 190, 0.9); }
+            .visible .cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); -webkit-transform: rotateY( -90deg ) translateZ( 100px ); background-color: rgba(190, 252, 255, 0.9); }
+            .visible .cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); -webkit-transform: rotateX(  90deg ) translateZ( 100px ); background-color: rgba(221, 190, 255, 0.9); }
+            .visible .cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); -webkit-transform: rotateX( -90deg ) translateZ( 100px ); background-color: rgba(206, 222, 209, 0.9); }
 
             @keyframes rotation {
                 0% { transform: translateZ( -100px ) rotateY(    0deg ); }
@@ -162,29 +169,40 @@
                 66% { transform: translateZ( -100px ) rotateY(  -90deg ); }
             }
             @-webkit-keyframes rotation {
-                0% { transform: translateZ( -100px ) rotateY(    0deg ); }
-                33% { transform: translateZ( -100px ) rotateX(   90deg ) }
-                66% { transform: translateZ( -100px ) rotateY(  -90deg ); }
+                0%  { transform: translateZ( -100px ) rotateY(    0deg ); -webkit-transform: translateZ( -100px ) rotateY(    0deg ); }
+                33% { transform: translateZ( -100px ) rotateX(   90deg ); -webkit-transform: translateZ( -100px ) rotateX(   90deg ); }
+                66% { transform: translateZ( -100px ) rotateY(  -90deg ); -webkit-transform: translateZ( -100px ) rotateY(  -90deg ); }
             }
 
-            .visible .cube.show-front  { transform: translateZ( -100px ) rotateY(    0deg ); }
-            .visible .cube.show-back   { transform: translateZ( -100px ) rotateX( -180deg ); }
-            .visible .cube.show-right  { transform: translateZ( -100px ) rotateY(  -90deg ); }
-            .visible .cube.show-left   { transform: translateZ( -100px ) rotateY(   90deg ); }
-            .visible .cube.show-top    { transform: translateZ( -100px ) rotateX(  -90deg ); }
-            .visible .cube.show-bottom { transform: translateZ( -100px ) rotateX(   90deg ); }
+            .visible .cube.show-front  { transform: translateZ( -100px ) rotateY(    0deg ); -webkit-transform: translateZ( -100px ) rotateY(    0deg ); }
+            .visible .cube.show-back   { transform: translateZ( -100px ) rotateX( -180deg ); -webkit-transform: translateZ( -100px ) rotateX( -180deg ); }
+            .visible .cube.show-right  { transform: translateZ( -100px ) rotateY(  -90deg ); -webkit-transform: translateZ( -100px ) rotateY(  -90deg ); }
+            .visible .cube.show-left   { transform: translateZ( -100px ) rotateY(   90deg ); -webkit-transform: translateZ( -100px ) rotateY(   90deg ); }
+            .visible .cube.show-top    { transform: translateZ( -100px ) rotateX(  -90deg ); -webkit-transform: translateZ( -100px ) rotateX(  -90deg ); }
+            .visible .cube.show-bottom { transform: translateZ( -100px ) rotateX(   90deg ); -webkit-transform: translateZ( -100px ) rotateX(   90deg ); }
         </style>
 
     </head>
     <body>
         <div class="part-1 visible">
             <h1>Mobile FPS Test</h1>
-            <p>This will test your device's display performance under several conditions.</p>
-            <p>For best results, close all other programs and let your phone rest for a few seconds before beginning the test.</p>
-            <p>At the end of the test, you will have the chance to upload your results. After enough samples are collected, all results will be published.</p>
-            <button class="advance">Begin</button>
-            <h4>Privacy note:</h4>
-            <p><i>This site does not use tracking. No data will be collected without your permission. No personally identifiable data will be collected. You will be able to review, but not change, all data before submitting it.</i></p>
+            <div class="support supported">
+                <p>This will test your device's display performance under several conditions.</p>
+                <p>At the end of the test, you will have the chance to upload your results. After enough samples are collected, all results will be published.</p>
+                <p>For best results, close all other programs and let your phone rest for a few seconds before beginning the test.</p>
+                <button class="advance">Begin</button>
+                <h4>Privacy notes:</h4>
+                <ol>
+                    <li>This site does not use tracking.</li>
+                    <li>No personally identifiable data will be collected.</li>
+                    <li>No data will be collected without your permission.</li>
+                    <li>You will be able to review, but not change, all data before deciding to share it.</li>
+                    <li>You can run the test without sharing your data.</li>
+                </ol>
+            </div>
+            <div class="support not-supported">
+                <p>Sorry. This test cannot be run on your browser. requestAnimationFrame() is not available.</p>
+            </div>
         </div>
         <div class="part-2">
             <h2>How would you describe your hardware?</h2>
@@ -421,6 +439,7 @@
                 test = -1,
                 maxTest = 2,
                 getElements = function (selector, parent) { return [].slice.call((parent || document).querySelectorAll(selector)); },
+                reqAnimFr = null,
                 sections = getElements('body > div'),
                 advanceButtons = getElements('button.advance'),
                 deviceSelectorButtons = getElements('button.device-selector'),
@@ -456,6 +475,11 @@
 
                 return Math.sqrt(avgSquareDiff);
             };
+            var getRequestAnimationFrame = function () {
+                  return  window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame; 
+            };
 
             var recordSamples = function (sampleStore, callback) {
                 var previousTime = null,
@@ -472,9 +496,9 @@
                     }
 
                     previousTime = time;
-                    requestAnimationFrame(getSample);
+                    reqAnimFr(getSample);
                 };
-                setTimeout(function () { requestAnimationFrame(getSample); }, 1000);
+                setTimeout(function () { reqAnimFr(getSample); }, 1000);
             };
 
             var showSummary = function () {
@@ -719,6 +743,11 @@
                 };
                 xmlhttp.send(JSON.stringify(payload));
             };
+            var start = function () {
+                reqAnimFr = getRequestAnimationFrame();
+                if (reqAnimFr) document.querySelector('.support.supported').className += ' visible';
+                else document.querySelector('.support.not-supported').className += ' visible';
+            };
 
             advanceButtons.forEach(function (button) { button.addEventListener('click', advancePart); });
             deviceSelectorButtons.forEach(function (button) { button.addEventListener('click', function () { selectDevice(button); advancePart(); }); });
@@ -726,6 +755,7 @@
             restartButtons.forEach(function (button) { button.addEventListener('click', restartTest); });
             sendResultsButtons.forEach(function (button) { button.addEventListener('click', sendResults); });
 
+            start();
         </script>
     </body>
 </html>
