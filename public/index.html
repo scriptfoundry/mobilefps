@@ -9,23 +9,36 @@
                 padding: 0;
                 border: 0;
                 margin: 0;
+                font-size: 1em;
+                font-weight: normal;
             }
             body {
                 padding: .5em;
             }
             h1 {
                 padding-bottom: 1em;
+                font-size: 1.6em;
+                font-weight: bold;
             }
             h2 {
+                font-size: 1.4em;
+                font-weight: bold;
             }
             h3 {
                 margin: 0;
-                border-bottom: 1px solid #ccc; 
+                border-bottom: 1px solid #ccc;
+                font-weight: bold; 
+            }
+            h4 {
+                font-weight: bold;
             }
             p {
-                padding-bottom: 1em;
+                padding: .5em 0;
             }
-            li { margin: 1em 2em; }
+            ul {
+                margin-bottom: 3em;
+            }
+            li { margin: 0 2em 0.5em; }
             input[type=text] {
                 display: block;
                 width: 100%;
@@ -53,6 +66,10 @@
                 height: 100%;
                 padding-top: 4em;
             }
+            .test h2 {
+                margin-bottom: 1em;
+            }
+
 
             button {
                 width: 100%;
@@ -63,6 +80,15 @@
                 border-radius: .3em;
                 font-size: 1em;
                 font-weight: bold;                
+            }
+            button + h2,
+            button + h3,
+            button + h4 {
+                margin-top: 2em;
+            }
+            h2 + button,
+            p + button {
+                margin-top: 1em;
             }
             button.device-selector {
                 text-align: left;
@@ -75,10 +101,11 @@
                 top:4em;
                 height: 100%;
                 padding: .5em;
+                box-sizing: border-box;
                 overflow-y: hidden;                
             }
             .disclose-data h2 {
-                margin-top: 4em;
+                margin-top: 2em;
             }
             .disclose-data span {
                 word-break: break-word;
@@ -154,9 +181,10 @@
             <h1>Mobile FPS Test</h1>
             <p>This will test your device's display performance under several conditions.</p>
             <p>For best results, close all other programs and let your phone rest for a few seconds before beginning the test.</p>
-            <p>At the end of the test, you will have the chance to upload your results. After enough samples are collected, the results will be published.</p>
-            <p><i>Privacy note: This site does not use tracking. No data will be collected without your permission. No personally identifiable data will be collected. You will be able to review, but not change, all data before submitting it.</i></p>
+            <p>At the end of the test, you will have the chance to upload your results. After enough samples are collected, all results will be published.</p>
             <button class="advance">Begin</button>
+            <h4>Privacy note:</h4>
+            <p><i>This site does not use tracking. No data will be collected without your permission. No personally identifiable data will be collected. You will be able to review, but not change, all data before submitting it.</i></p>
         </div>
         <div class="part-2">
             <h2>How would you describe your hardware?</h2>
@@ -183,8 +211,7 @@
         <div class="part-4 start-test">
             <h1>Testing FPS...</h1>
             <div class="test">
-                <h2>1. Collecting baseline FPS... please wait</h2>
-                
+                <h2>1. Measuring baseline FPS... please wait</h2>
             </div>
             <div class="test">
                 <h2>2. Measuring FPS with DOM mutations: <span id="dom-mutation-target">-</span></h2>    
@@ -209,8 +236,8 @@
             </div>
             <div class="test">
                 <h2>5. Measuring FPS with Touch events</h2>
-                <p>Please drag your finger around your screen until the test ends.</p>
-                <p>Test starts when you press the screen.</p>
+                <p>Please <b>drag your finger</b> around your screen until the test ends.</p>
+                <p>Test starts when you <b>touch the screen</b>.</p>
                 <div class="full-screen-overlay"></div>
             </div>
             
@@ -219,6 +246,12 @@
         <div class="part-5 summary">
             <h1>Summary</h1>
 
+            <ul>
+                <li>The numbers below are for <b><i>browser</i></b> render speeds, not native code render speeds. Especially on older devices, native code will usually be much faster.</li>
+                <li>60fps is generally the top speed you will see.</li>
+                <li>This test uses <code>requestAnimationFrame()</code> to measure render speeds.</li>
+            </ul>
+
             <div class="test">
                 <h3>Name</h3>
                 <table>
@@ -239,7 +272,7 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Samples</td>
+                        <td>Samples taken</td>
                         <td>0</td>
                     </tr>
                 </table>
@@ -265,7 +298,7 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Samples</td>
+                        <td>Samples taken</td>
                         <td>0</td>
                     </tr>
                 </table>
@@ -291,7 +324,7 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Samples</td>
+                        <td>Samples taken</td>
                         <td>0</td>
                     </tr>
                 </table>
@@ -317,7 +350,7 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Samples</td>
+                        <td>Samples taken</td>
                         <td>0</td>
                     </tr>
                 </table>
@@ -343,20 +376,23 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Samples</td>
+                        <td>Samples taken</td>
                         <td>0</td>
                     </tr>
                 </table>
             </div>
+
 
             <button class="test-again">Rerun tests</button>
-            <button class="advance">Share your results</button>
+            <button class="advance">Next</button>
 
         </div>
 
         <div class="part-6 disclose-data">
-            <h1>Finished</h1>
-            <p>Please help the community. Consider sharing your results!</p>
+            <h1>Please share!</h1>
+            <p>Please help the community. Consider sharing your results.</p>
+            <button class="send-results">Share now</button>
+            <h2>Notes:</h2>
             <ul>
                 <li>Only the data you see below will be sent to the server.</li>
                 <li>If you don't feel comfortable sharing this data, just close this page and nothing will happen.</li>
@@ -364,7 +400,6 @@
                 <li>Nothing other than what you see below will be collected or stored.</li>
                 <li>All collected data will be made public at the completion of the study.</li>
             </ul> 
-            <button class="send-results">Send now</button>
             <h2>The following data will be sent</h2>
             <p><b>Device description:</b> <span></span></p>
             <p><b>Maker:</b> <span></span></p>
@@ -373,11 +408,11 @@
             <p><b>Your useragent string:</b> <span></span></p>
             <p><b>Samples collected</b></p>
             <p><span></span></p>
-            <button class="send-results">Send now</button>
+            <button class="send-results">Share now</button>
         </div>
 
         <div class="part-7">
-            <h1>Thank you!</h1>
+            <h1>Thank you for sharing!</h1>
         </div>
 
         <script>
@@ -627,7 +662,6 @@
             };
             var restartTest = function () {
                 var newPart = sections.reduce(function (carry, section, index) { if (section.className.indexOf('start-test') > -1) return index; return carry; });
-                debugger
                 test = -1;
                 advancePart(newPart);
             };
