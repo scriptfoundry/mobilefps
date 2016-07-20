@@ -1,22 +1,26 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "Mobile FPS Performance Test and Survey",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "An open project to collect actual frame-per-second render performance in mobile browsers.",
   "keywords": [
     "OpenShift",
     "Node.js",
     "application",
-    "openshift"
+    "openshift",
+    "mobile browser",
+    "performance",
+    "refresh speed",
+    "frames per second"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "Andrew Adamson",
+    "email": "andrew.adamson@gmail.com",
+    "url": "http://www.scriptfoundry.com/"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://www.scriptfoundry.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/scriptfoundry/mobilefps"
   },
   "engines": {
     "node": ">= 0.6.0",
