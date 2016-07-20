@@ -23,18 +23,20 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-      "body-parser": "~1.15.1",
-      "debug": "~2.2.0",
-      "express": "^4.14.0",
-      "serve-favicon": "~2.3.0"
+    "body-parser": "~1.15.1",
+    "debug": "~2.2.0",
+    "express": "^4.14.0",
+    "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
-    "express-generator": "^4.13.4"
+    "express-generator": "^4.13.4",
+    "supervisor": "^0.11.0"
   },
   "bundleDependencies": [],
   "private": true,
   "scripts": {
-     "start": "node server.js"
+    "start": "node server.js",
+    "live": "supervisor -w lib,server.js server.js"
   },
   "main": "server.js"
 }

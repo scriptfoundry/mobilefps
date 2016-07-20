@@ -22,6 +22,9 @@
                 margin: 0;
                 border-bottom: 1px solid #ccc; 
             }
+            p {
+                padding-bottom: 1em;
+            }
             li { margin: 1em 2em; }
             input[type=text] {
                 display: block;
@@ -64,6 +67,9 @@
             button.device-selector {
                 text-align: left;
             }
+            .color-1 { background-color: #e1f8ff; }
+            .color-2 { background-color: #ebf7fd; }
+            .color-3 { background-color: #f4f8fb; }
             .start-test .test {
                 position: absolute;
                 top:4em;
@@ -116,12 +122,12 @@
                 font-size: 5em;
             }
 
-            .visible .cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); background-color: #ffbebe; }
-            .visible .cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); background-color: #fff4be; }
-            .visible .cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); background-color: #daffbe; }
-            .visible .cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); background-color: #befcff; }
-            .visible .cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background-color: #ddbeff; }
-            .visible .cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background-color: #ceded1; }
+            .visible .cube .front  { transform: rotateY(   0deg ) translateZ( 100px ); background-color: rgba(255, 190, 190, 0.9); }
+            .visible .cube .back   { transform: rotateX( 180deg ) translateZ( 100px ); background-color: rgba(255, 244, 190, 0.9); }
+            .visible .cube .right  { transform: rotateY(  90deg ) translateZ( 100px ); background-color: rgba(218, 255, 190, 0.9); }
+            .visible .cube .left   { transform: rotateY( -90deg ) translateZ( 100px ); background-color: rgba(190, 252, 255, 0.9); }
+            .visible .cube .top    { transform: rotateX(  90deg ) translateZ( 100px ); background-color: rgba(221, 190, 255, 0.9); }
+            .visible .cube .bottom { transform: rotateX( -90deg ) translateZ( 100px ); background-color: rgba(206, 222, 209, 0.9); }
 
             @keyframes rotation {
                 0% { transform: translateZ( -100px ) rotateY(    0deg ); }
@@ -146,18 +152,24 @@
     <body>
         <div class="part-1 visible">
             <h1>Mobile FPS Test</h1>
-            <p>Some mobile devices are able to render native HTML animations at a crisp 60 frames per second, while others simply cannot.</p>
+            <p>This will test your device's display performance under several conditions.</p>
+            <p>For best results, close all other programs and let your phone rest for a few seconds before beginning the test.</p>
+            <p>At the end of the test, you will have the chance to upload your results. After enough samples are collected, the results will be published.</p>
+            <p><i>Privacy note: This site does not use tracking. No data will be collected without your permission. No personally identifiable data will be collected. You will be able to review, but not change, all data before submitting it.</i></p>
             <button class="advance">Begin</button>
         </div>
         <div class="part-2">
             <h2>How would you describe your hardware?</h2>
-            <button class="device-selector">PC</button>
-            <button class="device-selector">Current flagship mobile</button>
-            <button class="device-selector">Current non-flagship mobile</button>
-            <button class="device-selector">Current discount mobile</button>
-            <button class="device-selector">Older flagship mobile flagship</button>
-            <button class="device-selector">Older non-flagship mobile</button>
-            <button class="device-selector">Older discount mobile</button> 
+            <button class="device-selector">PC / Non-mobile</button>
+            <button class="device-selector color-1">Current flagship</button>
+            <button class="device-selector color-1">Current non-flagship</button>
+            <button class="device-selector color-1">Current discount</button>
+            <button class="device-selector color-2">Previous gen. flagship</button>
+            <button class="device-selector color-2">Previous gen. non-flagship</button>
+            <button class="device-selector color-2">Previous gen. discount</button> 
+            <button class="device-selector color-3">Older flagship</button>
+            <button class="device-selector color-3">Older non-flagship</button>
+            <button class="device-selector color-3">Older discount</button> 
         </div>
         <div class="part-3">
             <h1>More about your hardware:</h1>
@@ -166,7 +178,7 @@
             <h2>What model is it?</h2>
             <input type="text" name="model" placeholder="(Optional)">
             <button class="device-details">Begin test</button>
-
+            <p><i>During the test, please do not touch the screen until asked.</i></p>
 
         </div>
         <div class="part-4 start-test">
@@ -358,6 +370,7 @@
             <p><b>Device description:</b> <span></span></p>
             <p><b>Maker:</b> <span></span></p>
             <p><b>Model:</b> <span></span></p>
+            <p><b>Screen:</b> <span></span>x<span></span> (<span></span>x<span></span>)</p>
             <p><b>Your useragent string:</b> <span></span></p>
             <p><b>Samples collected</b></p>
             <p><span></span></p>
@@ -384,6 +397,10 @@
                 userPlatform = null,
                 maker = null,
                 model = null,
+                width = null,
+                height = null,
+                trueWidth = 'unknown',
+                trueHeight = 'unknown',
                 samples = {
                     baseline: [],
                     dom: [],
@@ -430,8 +447,25 @@
                 var summaryParts = getElements('.summary .test'),
                     truncateData = function (samples) {
                         return samples.map(function (sample) { return Math.round(sample * 1000); });
-                    };
+                    },
+                    tmp;
 
+                width = screen.width;
+                height = screen.height;
+                if (window.devicePixelRatio) {
+                    trueWidth = Math.round(screen.width * window.devicePixelRatio);
+                    trueHeight = Math.round(screen.height * window.devicePixelRatio);
+                }
+
+                if (width > height) {
+                    tmp = height;
+                    height = width;
+                    width = tmp;
+
+                    tmp = trueHeight;
+                    trueHeight = trueWidth;
+                    trueWidth = tmp; 
+                }
 
                 summaryData = [
                     {title: 'Baseline', samples: samples.baseline},
@@ -458,7 +492,7 @@
 
             var showDisclosures = function () {
                 var disclosureParts = getElements('.disclose-data span'),
-                    disclosureData = [userPlatform, maker, model, window.navigator.userAgent || 'unknown user agent', JSON.stringify(summaryData)];
+                    disclosureData = [userPlatform, maker, model, trueWidth, trueHeight, width, height, window.navigator.userAgent || 'unknown user agent', JSON.stringify(summaryData)];
 
                 disclosureParts.forEach(function (cell, index) { cell.innerHTML = disclosureData[index]; });
             };
@@ -633,15 +667,24 @@
                 });
             };
             var sendResults = function () {
-                var payload = {
-                    userPlatform: userPlatform,
-                    userAgent: navigator.userAgent,
-                    samples: samples
-                };
+                var xmlhttp = new XMLHttpRequest(), 
+                    payload = {
+                        userPlatform: userPlatform,
+                        userAgent: navigator.userAgent,
+                        device: {maker: maker, model: model},
+                        screen: [width, height, trueWidth, trueHeight],
+                        samples: samples
+                    };
 
-                console.log(summaryData);
-                console.log(navigator);
-                console.log(samples);
+                xmlhttp.open("POST", "/share");
+                xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                        if (xmlhttp.status === 200) return advancePart();
+                        alert('There was a problem with the server request.');
+                    }
+                };
+                xmlhttp.send(JSON.stringify(payload));
             };
 
             advanceButtons.forEach(function (button) { button.addEventListener('click', advancePart); });
