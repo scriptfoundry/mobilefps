@@ -21,8 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post('/share', function (req, res) {
   var share = new Share(req.body, req.headers['user-agent']);
   share.save()
-  .then(() => res.status(200).json({'result': 'success'}))
-  .catch(err => res.status(err.status || 500).json({'result': 'error'}));
+  .then(function () { res.status(200).json({'result': 'success'}); })
+  .catch(function (err) { res.status(err.status || 500).json({'result': 'error'}); });
 });
 
 // catch 404 and forward to error handler
