@@ -36,8 +36,16 @@ app.use(function(req, res, next) {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  console.error(err.message);
-  console.error(err.stack);
+  console.error('======start======');
+  console.error('Error at      ', new Date().toString());
+  console.error('Message:      ', err.message);
+  console.error('Url:          ', req.url);
+  console.error('Method:       ', req.method);
+  console.error('Headers (raw)\n', req.rawHeaders);
+  console.error('Request body:\n', req.body);
+  console.error('Stack trace:\n', err.stack);
+  console.error('=======end=======');
+
   res.status(err.status || 500).json({
     message: err.message,
     error: {}
