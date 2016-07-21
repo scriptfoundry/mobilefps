@@ -1,5 +1,5 @@
 {
-  "name": "Mobile FPS Performance Test and Survey",
+  "name": "MobileFPS",
   "version": "1.0.0",
   "description": "An open project to collect actual frame-per-second render performance in mobile browsers.",
   "keywords": [
