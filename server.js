@@ -41,7 +41,7 @@ app.use(function(err, req, res, next) {
   console.error('Message:      ', err.message);
   console.error('Url:          ', req.url);
   console.error('Method:       ', req.method);
-  console.error('Headers (raw)\n', req.rawHeaders);
+  console.error('Headers (raw)\n', req.headers);
   console.error('Request body:\n', req.body);
   console.error('Stack trace:\n', err.stack);
   console.error('=======end=======');
