@@ -507,7 +507,7 @@
                     if (previousTime === null) {
                         completeTime = time + 2000;
                     } else {
-                        sampleStore.push(1000 / (time - previousTime));
+                        sampleStore.push((Math.round(1000000 / (time - previousTime))) / 1000);
                         if (time > completeTime || samples.length > 120) {
                             return callback(sampleStore);
                         };
