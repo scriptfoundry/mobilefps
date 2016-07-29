@@ -1,4 +1,5 @@
 var express = require('express');
+  compression = require('compression'),
   path = require('path'),
   favicon = require('serve-favicon'),
   bodyParser = require('body-parser'),
@@ -8,7 +9,7 @@ var express = require('express');
   address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
   Share = require('./lib/share');
 
-// uncomment after placing your favicon in /public
+app.use(compression());
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,6 +21,15 @@ app.post('/share', function (req, res) {
   .then(function () { res.status(200).json({'result': 'success'}); })
   .catch(function (err) { res.status(err.status || 500).json({'result': 'error'}); });
 });
+
+app.get('/devices', function (req, res) {
+  res.sendFile(path.join(process.env.OPENSHIFT_DATA_DIR || '/tmp/', 'summaries/devices.json'));
+});
+
+app.get('/summaries', function (req, res) {
+  res.sendFile(path.join(process.env.OPENSHIFT_DATA_DIR || '/tmp/', 'summaries/summary.json'));
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
