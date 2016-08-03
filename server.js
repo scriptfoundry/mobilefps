@@ -22,11 +22,11 @@ app.post('/share', function (req, res) {
   .catch(function (err) { res.status(err.status || 500).json({'result': 'error'}); });
 });
 
-app.get('/devices', function (req, res) {
+app.get('/api/devices', function (req, res) {
   res.sendFile(path.join(process.env.OPENSHIFT_DATA_DIR || '/tmp/', 'summaries/devices.json'));
 });
 
-app.get('/summaries', function (req, res) {
+app.get('/api/summaries', function (req, res) {
   res.sendFile(path.join(process.env.OPENSHIFT_DATA_DIR || '/tmp/', 'summaries/summary.json'));
 });
 

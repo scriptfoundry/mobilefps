@@ -51,31 +51,50 @@ var getBestUniqueNames = function (names) {
     return uniqueNames.sort();
 };
 
-var normalizeData = function (summary) {
-    var bestMakers = getBestUniqueNames(summary.map(function (report) { return report.maker; })),
-        bestModels = getBestUniqueNames(summary.map(function (report) { return report.model; })),
-        modelsByMaker = {};
+var normalizeData = function (reports) {
+    var bestMakers = getBestUniqueNames(reports.map(function (report) { return report.description[Report.USER_MAKER]; })),
+        bestModels = getBestUniqueNames(reports.map(function (report) { return report.description[Report.USER_MODEL]; })),
+        modelsByMaker = {},
+        versionsByOSName = {},
+        versionsByBrowserName = {},
+        modelsByDeviceVendor = {};
 
-    summary.sort(function (a, b) { return a.maker > b.maker ? 1 : -1; });
+    reports.sort(function (a, b) { return a.maker > b.maker ? 1 : -1; });
 
-    summary.forEach(function (report) {
-        var currentMaker = report.maker,
-            currentModel = report.model,
+    reports.forEach(function (report) {
+        var currentMaker = report.description[Report.USER_MAKER],
+            currentModel = report.description[Report.USER_MODEL],
+
             bestMaker = bestMakers.reduce(function (current, best) { if (best.toLowerCase() === currentMaker.trim().toLowerCase()) return best; return current; }, currentMaker),
-            bestModel = bestModels.reduce(function (current, best) { if (best.toLowerCase() === currentModel.trim().toLowerCase()) return best; return current; }, currentModel);
+            bestModel = bestModels.reduce(function (current, best) { if (best.toLowerCase() === currentModel.trim().toLowerCase()) return best; return current; }, currentModel),
 
-        report.maker = bestMaker;
-        report.model = bestModel;
+            maker = bestMaker,
+            model = bestModel,
+            osName = report.description[Report.OS_NAME],
+            osVersion = report.description[Report.OS_VERSION],
+            browserName = report.description[Report.BROWSER_NAME],
+            browserVersionNumber = report.description[Report.BROWSER_VERSION_MAJOR],
+            deviceVendor = report.description[Report.DEVICE_VENDOR],
+            deviceModel = report.description[Report.DEVICE_MODEL];
 
-        if (typeof modelsByMaker[report.maker] == 'undefined') modelsByMaker[report.maker] = [report.model];
-        else if (!modelsByMaker[report.maker].some(function(model) { return model === report.model; })) modelsByMaker[report.maker].push(report.model);
+        if (typeof modelsByMaker[maker] == 'undefined') modelsByMaker[maker] = [model];
+        else if (!modelsByMaker[maker].some(function(model) { return model === model; })) modelsByMaker[maker].push(model);
 
-        modelsByMaker[report.maker].sort();
+        if (typeof versionsByOSName[osName] == 'undefined') versionsByOSName[osName] = [osVersion];
+        else if (!versionsByOSName[osName].some(function (version) { return version === osVersion; })) versionsByOSName[osName].push(osVersion);
+
+        if (typeof versionsByBrowserName[browserName] == 'undefined') versionsByBrowserName[browserName] = [browserVersionNumber];
+        else if (!versionsByBrowserName[browserName].some(function (version) { return version === browserVersionNumber; })) versionsByBrowserName[browserName].push(browserVersionNumber);
+
+        if (typeof modelsByDeviceVendor[deviceVendor] == 'undefined') modelsByDeviceVendor[deviceVendor] = [deviceModel];
+        else if (!modelsByDeviceVendor[deviceVendor].some(function (version) { return version === deviceModel; })) modelsByDeviceVendor[deviceVendor].push(deviceModel);
+
+        modelsByMaker[maker].sort();
     });
 
-    summary.sort(function (a, b) { return a.rating > b.rating ? 1 : -1; });
+    reports.sort(function (a, b) { return a.rating > b.rating ? 1 : -1; });
 
-    return [modelsByMaker, summary];
+    return [{modelsByMaker, versionsByOSName, versionsByBrowserName, modelsByDeviceVendor}, reports];
 };
 
 var saveResults = function (payload) {

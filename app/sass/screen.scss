@@ -1,0 +1,101 @@
+@import './reset.scss';
+
+body {
+    font-family: sans-serif;
+}
+h6 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.filter {
+    display: flex;
+    max-width: 900px;
+    .section {
+        position: relative;
+        flex: 1;
+        vertical-align: bottom;
+
+        h6,
+        select {
+            width: 100%;
+        }
+
+        button {
+            vertical-align: bottom;
+        }
+    }
+}
+
+.perf {
+    font-size: .8em;
+
+    h1 {
+        margin: 1em 0 0;
+        font-size: 2em;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .report {
+        $name-col: 1;
+        $vendor-col: 2;
+        display: flex;
+        background-color: #ebebeb;
+        padding: .2em 0;
+        margin: 1px 0;
+
+        &.heading > div {
+            font-weight: bold;
+            align-self: flex-end;
+            text-align: center;
+        }
+
+        > div {
+            flex: 1 0;
+            padding: 0 .5em;
+            text-align: left;
+
+            &:nth-child(1),
+            &:nth-child(2) {
+                flex-grow: 6;
+            }
+            &:nth-child(3) {
+                flex-grow: 4;
+            }
+            &:nth-child(8) {
+                flex: 15;
+                padding: 0;
+            }
+         }
+    }
+}
+
+.histogram {
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, .2);
+    font-size: .5em;
+    height: 2em;
+    background-color: #fff;
+
+    > div {
+        flex: 1;
+        display: inline-block;
+        position: relative;
+        color: rgba(#000, .5);
+    }
+}
+
+.info {
+    &::before {
+        content: '?';
+        display: block;
+        border-radius: 1em;
+        border: 1px solid black;
+        font-size: .7em;
+        width: 1em;
+        height: 1em;
+        text-align: center;
+        font-weight: bold;
+    }
+}
