@@ -1,0 +1,4 @@
+#!/bin/bash
+# This makes npm not install devDependencies.
+echo 'Enabling npm production'
+echo 'production = true' >> $OPENSHIFT_REPO_DIR/.npmrc
