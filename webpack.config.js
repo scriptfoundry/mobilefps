@@ -9,8 +9,8 @@ var path = require('path'),
 	  });
 
 module.exports = {
-	debug: true,
-	devtool: '#inline-source-map',    
+	// debug: true,
+	// devtool: '#inline-source-map',
     entry: {
         'viz': path.join(__dirname, 'app', 'viz.js')
     },
@@ -23,9 +23,12 @@ module.exports = {
         ]
     },
     plugins: [
-		new webpack.DefinePlugin({
-			__DEV__: true
-		}),
+        new webpack.DefinePlugin({
+		// 	__DEV__: true
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
+        }),
         indexPagePlugin,
         new ExtractTextPlugin('[name].[hash].css')
     ],
