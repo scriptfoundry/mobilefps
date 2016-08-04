@@ -94,7 +94,14 @@ var normalizeData = function (reports) {
 
     reports.sort(function (a, b) { return a.rating > b.rating ? 1 : -1; });
 
-    return [{modelsByMaker, versionsByOSName, versionsByBrowserName, modelsByDeviceVendor}, reports];
+    return [{
+            modelsByMaker: modelsByMaker,
+            versionsByOSName: versionsByOSName,
+            versionsByBrowserName: versionsByBrowserName,
+            modelsByDeviceVendor: modelsByDeviceVendor
+        },
+        reports
+    ];
 };
 
 var saveResults = function (payload) {
