@@ -39,27 +39,38 @@ app.get('/api/raw', function (req, res) {
   var rxValidSampleFileName = /^\d+\.\d+\.txt$/, 
     zip;
 
-  fs.exists(zipPath, function (exists) {
-    var options = {
-      headers: {
-        'Content-Disposition': 'inline; filename="fpstest-raw-samples.zip"'
-      }
+  fs.stat(zipPath, function (err, stats) {
+    var oneDay = 86400000,
+      options = {
+        headers: {
+          'Content-Disposition': 'inline; filename="fpstest-raw-samples.zip"'
+        }
+      };
+
+    var generateZipFile = function () {
+      fs.readdir(samplesPath, function (err, files) {
+        if (err) return res.status(500).send(err.message);
+
+        zip = new AdmZip();
+        files.forEach(function (fileName) {
+          if (rxValidSampleFileName.test(fileName)) zip.addLocalFile(path.join(samplesPath, fileName));
+        });
+        zip.writeZip(zipPath);
+
+        res.sendFile(zipPath, options);
+      });
     };
 
-    if (exists) return res.sendFile(zipPath, options);
-
-    fs.readdir(samplesPath, function (err, files) {
-      if (err) return res.status(500).send(err.message);
-
-      zip = new AdmZip();
-      files.forEach(function (fileName) {
-        if (rxValidSampleFileName.test(fileName)) zip.addLocalFile(path.join(samplesPath, fileName));
-      });
-      zip.writeZip(zipPath);
-
-      res.sendFile(zipPath, options);
-    });
-
+    if (err) {
+      if (err.code && err.code === 'ENOENT') return generateZipFile();
+      else if (err.message) return res.status(400).send(err.message);
+      return res.status(500).send('An unknown error occurred');
+    } else {
+      console.log(stats);
+      console.log(stats.ctime.getTime(), new Date().getTime(), stats.ctime.getTime() < (new Date().getTime() - oneDay));
+      if (stats.ctime.getTime() < (new Date().getTime() - oneDay)) return generateZipFile();
+      return res.sendFile(zipPath, options);
+    }
   });
 });
 
