@@ -23,19 +23,20 @@ export class PerformanceChart extends React.Component {
                 .filter(this.props.reports, this.state.filter)
                 .sort((a, b) => a.testResults[this.state.filter.selectedTestType].score > b.testResults[this.state.filter.selectedTestType].score ? 1 : -1)
                 .map((report, index) => <PerformanceItemComponent report={report} activeHistogram={this.state.filter.selectedTestType} key={index} />),
-            title = [visibleReports.length, ' report', visibleReports.length === 1 ? '' : 's'].join('');
+            title = visibleReports.length ? [visibleReports.length, ' report', visibleReports.length === 1 ? '' : 's'].join('') : 'Loading....';
 
         return <div className="perf">
             <h1>{title}</h1>
             <div className="report heading">
                 <div>User description</div>
                 <div>Make/model*</div>
+                <div>OS</div>
                 <div>Browser</div>
                 <div>Vers</div>
                 <div>Info</div>
-                <div>Total score</div>
+                <div>Device Rating</div>
                 <div>Test Score</div>
-                <div>Histogram</div>
+                <div>Flame Chart</div>
             </div>
             {visibleReports}
         </div>;

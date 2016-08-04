@@ -1,12 +1,17 @@
 var express = require('express');
   compression = require('compression'),
+  fs = require('fs'),
+  AdmZip = require('adm-zip'),
   path = require('path'),
   favicon = require('serve-favicon'),
   bodyParser = require('body-parser'),
 
   app = express(),
   port = process.env.OPENSHIFT_NODEJS_PORT || 8000,
-  address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
+  address = process.env.OPENSHIFT_NODEJS_IP || '10.0.1.32',
+  dataPath = process.env.OPENSHIFT_DATA_DIR || '/tmp/',
+  samplesPath = path.join(dataPath, 'samples/'),
+  zipPath = path.join(dataPath, 'summaries', 'samples.zip'),
   Share = require('./lib/share');
 
 app.use(compression());
@@ -23,13 +28,40 @@ app.post('/share', function (req, res) {
 });
 
 app.get('/api/devices', function (req, res) {
-  res.sendFile(path.join(process.env.OPENSHIFT_DATA_DIR || '/tmp/', 'summaries/devices.json'));
+  res.sendFile(path.join(dataPath, 'summaries/devices.json'));
 });
 
 app.get('/api/summaries', function (req, res) {
-  res.sendFile(path.join(process.env.OPENSHIFT_DATA_DIR || '/tmp/', 'summaries/summary.json'));
+  res.sendFile(path.join(dataPath, 'summaries/summary.json'));
 });
 
+app.get('/api/raw', function (req, res) {
+  var rxValidSampleFileName = /^\d+\.\d+\.txt$/, 
+    zip;
+
+  fs.exists(zipPath, function (exists) {
+    var options = {
+      headers: {
+        'Content-Disposition': 'inline; filename="fpstest-raw-samples.zip"'
+      }
+    };
+
+    if (exists) return res.sendFile(zipPath, options);
+
+    fs.readdir(samplesPath, function (err, files) {
+      if (err) return res.status(500).send(err.message);
+
+      zip = new AdmZip();
+      files.forEach(function (fileName) {
+        if (rxValidSampleFileName.test(fileName)) zip.addLocalFile(path.join(samplesPath, fileName));
+      });
+      zip.writeZip(zipPath);
+
+      res.sendFile(zipPath, options);
+    });
+
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -58,6 +90,10 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(port, address, function () {
-  console.log('Server loaded');
+fs.unlink(zipPath, function (err) {
+  if (err) console.log('No zip file exists. It will be created the first time it is required.');
+  else console.log('existing zip file deleted');
+  app.listen(port, address, function () {
+    console.log('Server loaded');
+  });
 });

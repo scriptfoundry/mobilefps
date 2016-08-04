@@ -22,6 +22,7 @@ export class PerformanceItemComponent extends React.Component {
         return <div className="report">
             <div>{this.makeName()}</div>
             <div>{this.makeVendorName()}</div>
+            <div>{[this.props.report.osName, this.props.report.osVersion].join(' ')}</div>
             <div>{this.props.report.browserName}</div>
             <div>{this.props.report.browserVersion}</div>
             <div className="info" title={this.props.report.userAgent}></div>

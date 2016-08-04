@@ -59,6 +59,11 @@ export class Filter extends React.Component {
 
         return <div className="filter">
             <div className="section">
+                <h6>Select Test</h6>
+                <select value={this.state.selectedTestType} onChange={ evt => this.setState({selectedTestType: evt.target.value}) }>{testTypeElements}</select>
+                <button onClick={() => this.clearSelections()}>Clear all filters</button>
+            </div>
+            <div className="section">
                 <h6>User description</h6>
                 <select value={this.state.selectedMake} onChange={evt => this.setState({selectedMake: evt.target.value, selectedModel: ''})}>{makerElements}</select>
                 <select value={this.state.selectedModel} onChange={evt => this.setState({selectedModel: evt.target.value})}>{modelElements}</select>
@@ -77,11 +82,6 @@ export class Filter extends React.Component {
                 <h6>Vendor</h6>
                 <select value={this.state.selectedDeviceVendor} onChange={ evt => this.setState({selectedDeviceVendor: evt.target.value, selectedDeviceVendorModel: ''})}>{deviceVendorElements}</select>
                 <select value={this.state.selectedDeviceVendorModel} onChange={ evt => this.setState({selectedDeviceVendorModel: evt.target.value})}>{deviceVendorModelElements}</select>
-            </div>
-            <div className="section">
-                <h6>Test</h6>
-                <select value={this.state.selectedTestType} onChange={ evt => this.setState({selectedTestType: evt.target.value}) }>{testTypeElements}</select>
-                <button onClick={() => this.clearSelections()}>Clear all filters</button>
             </div>
         </div>;
     }

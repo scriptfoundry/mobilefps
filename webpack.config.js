@@ -27,7 +27,7 @@ module.exports = {
 			__DEV__: true
 		}),
         indexPagePlugin,
-        new ExtractTextPlugin('[name].css')
+        new ExtractTextPlugin('[name].[hash].css')
     ],
     devServer: { 
         // This is just so that I can run the node server for API requests on port 8000 while the
