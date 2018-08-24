@@ -27,18 +27,18 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-    "adm-zip": "^0.4.7",
+    "adm-zip": "^0.4.11",
     "axios": "^0.13.1",
-    "body-parser": "~1.15.1",
+    "body-parser": "^1.18.3",
     "chart.js": "^2.2.0",
-    "compression": "^1.6.2",
-    "debug": "~2.2.0",
-    "express": "^4.14.0",
-    "serve-favicon": "~2.3.0",
+    "compression": "^1.7.3",
+    "debug": "^3.1.0",
+    "express": "^4.16.3",
+    "serve-favicon": "^2.5.0",
     "when": "^3.7.7"
   },
   "devDependencies": {
-    "babel-cli": "^6.11.4",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.11.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-runtime": "^6.12.0",
